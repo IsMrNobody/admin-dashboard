@@ -3,6 +3,7 @@
     <v-container>
       <v-row>
         <v-btn v-if="loger" @click="login" block>Login</v-btn>
+        <v-btn v-if="!loger" @click="logOut" block>Salir</v-btn>
         <v-col
           cols="12"
           md="4"
@@ -161,7 +162,7 @@
           active: false
       },
       slogan: '',
-      categoris: ['criolla', 'rapida', 'sushi'],
+      categoris: ['criolla', 'rapida', 'sushi', 'hamburguesa', 'pizza', 'china', 'arabe'],
       category: '',
       cities: ['anaco', 'tigre', 'barcelona'],
       citis: '',
@@ -183,7 +184,10 @@
       loger: true
     }),
     created() {
-      this.login()
+      const user = Moralis.User.current()
+      if (user) {
+        this.loger = false
+      }
     },
     methods: {
         onFile(event) {
@@ -210,6 +214,11 @@
           this.loger = false
           }
           console.log("logged in user:", user)
+        },
+        async logOut() {
+          await Moralis.User.logOut()
+          console.log('deslogueado')
+          this.loger = true
         },
         async sendData() {
             this.cargando = true

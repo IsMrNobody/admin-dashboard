@@ -9,8 +9,8 @@ export const mutation = {
 }
 
 export const actions = {
-  async sendMerchant({ commit }, data) {
+  async sendMerchant({ _ctx }, data) {
     const merchantSend = await postMerchant(data)
-    console.log('enviando por estore >' + merchantSend)
+    console.log(merchantSend)
   }
 }
