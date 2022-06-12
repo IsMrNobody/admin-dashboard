@@ -2,8 +2,8 @@
   <v-form v-model="valid">
     <v-container>
       <v-row>
-        <v-btn v-if="loger" block @click="login">Login</v-btn>
-        <v-btn v-if="!loger" block @click="logOut">Salir</v-btn>
+        <v-btn block @click="login" class="mb-4">Login</v-btn>
+        <v-btn block @click="logOut">Salir</v-btn>
         <v-col
           cols="12"
           md="4"
@@ -168,10 +168,11 @@
       }
     },
     created() {
-      const user = Moralis.User.current()
-      if (user) {
-        this.loger = false
-      }
+      // const user = Moralis.User.current()
+      // if (user) {
+      //   this.loger = false
+      // }
+      // this.logOut()
     },
     methods: {
         onFile(event) {
