@@ -2,8 +2,8 @@
   <v-form v-model="valid">
     <v-container>
       <v-row>
-        <v-btn v-if="loger" @click="login" block>Login</v-btn>
-        <v-btn v-if="!loger" @click="logOut" block>Salir</v-btn>
+        <v-btn v-if="loger" block @click="login">Login</v-btn>
+        <v-btn v-if="!loger" block @click="logOut">Salir</v-btn>
         <v-col
           cols="12"
           md="4"
@@ -56,33 +56,6 @@
           ></v-text-field>
         </v-col>
 
-        <v-row class="ma-2">
-            <v-col
-            cols=""
-            sm="6"
-            md="4"
-            >
-            <v-text-field
-                label="Latitud"
-                v-model="coordinateslat"
-                outlined
-                dense
-            ></v-text-field>
-            </v-col>
-            <v-col
-            cols=""
-            sm="6"
-            md="4"
-            >
-            <v-text-field
-                label="Logitud"
-                v-model="coordinateslong"
-                outlined
-                dense
-            ></v-text-field>
-            </v-col>
-        </v-row>
-
         <v-col>
           <v-switch
             v-model="delivery.active"
@@ -100,8 +73,8 @@
             accept="image/*"
             label="Logo"
             :loading="cargando"
-            @change="onFile"
             outlined
+            @change="onFile"
           ></v-file-input>
           <!-- <v-img width="300" :src="srcLogo"></v-img> -->
         </v-col>
@@ -114,42 +87,47 @@
             accept="image/*"
             label="Banner"
             :loading="cargando"
-            @change="onFileBanner"
             outlined
+            @change="onFileBanner"
           ></v-file-input>
           <!-- <v-img width="300" :src="srcBanner"></v-img> -->
         </v-col>
 
         <v-col cols="12">
           <v-select
-            :items="cities"
             v-model="citis"
+            :items="cities"
             outlined
             :menu-props="{ top: true, offsetY: true }"
             label="Ciudad"
           ></v-select>
         </v-col>
 
+        <v-col>
+          <MapaM />
+        </v-col>
+
         <v-col cols="12">
           <v-select
-            :items="categoris"
             v-model="category"
+            :items="categoris"
             outlined
             :menu-props="{ top: true, offsetY: true }"
             label="Categoria"
           ></v-select>
         </v-col>
-        <v-card width="100%" class="pt-2" v-if="cargando">
+        <v-card v-if="cargando" width="100%" class="pt-2">
           <!-- <p>Cargando....</p> -->
           <v-img width="100%" src="https://c.tenor.com/13VnwKt5qS0AAAAd/waiting.gif"></v-img>
         </v-card>
-        <v-btn @click="sendData" color="green" :disabled="cargando" block>Enviar</v-btn>
+        <v-btn block color="green" :disabled="cargando" @click="sendData">Enviar</v-btn>
       </v-row>
     </v-container>
   </v-form>
 </template>
 
 <script>
+  import MapaM from '@/components/MapaM'
   const Moralis = require('moralis')
   const serverUrl = "https://hplfjqfbct7p.usemoralis.com:2053/server"
   const appId = "KtP2UEvFGJ2HAEC3xEJIsWuNygLzcKXYhyI3fLxU"
@@ -157,6 +135,9 @@
   Moralis.start({serverUrl, appId, masterKey})
 
   export default {
+    components: {
+      MapaM
+    },
     data: () => ({
       delivery: {
           active: false
@@ -167,8 +148,6 @@
       cities: ['anaco', 'tigre', 'barcelona'],
       citis: '',
       valid: false,
-      coordinateslat: '',
-      coordinateslong: '',
       direction: '',
       phone: '',
       nameOwner: {
@@ -183,6 +162,11 @@
       cargando: false,
       loger: true
     }),
+    computed: {
+      coordenadas() {
+        return this.$store.state.mapa.coordinates
+      }
+    },
     created() {
       const user = Moralis.User.current()
       if (user) {
@@ -213,11 +197,11 @@
           user = await Moralis.authenticate()
           this.loger = false
           }
-          console.log("logged in user:", user)
+          // console.log("logged in user:", user)
         },
         async logOut() {
           await Moralis.User.logOut()
-          console.log('deslogueado')
+          // console.log('deslogueado')
           this.loger = true
         },
         async sendData() {
@@ -243,7 +227,7 @@
                 slogan: this.slogan,
                 paymentMethods: [],
                 reviews: [],
-                coordinates: [this.coordinateslat, this.coordinateslong],
+                coordinates: this.coordenadas,
                 phone: this.phone,
                 logo: enlaceImg,
                 banner: enlaceBan
