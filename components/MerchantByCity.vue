@@ -9,7 +9,7 @@
       </v-col>
       <v-col v-for="(m, i) in merchants" :key="i">
         <p>{{ m.name }}</p>
-        <v-btn @click="delet(i)" color="red" icon fab small>x</v-btn>
+        <v-btn  icon fab small @click="delet(i)" color="red">x</v-btn>
         <v-divider></v-divider>
       </v-col>
     </v-card>

@@ -1,8 +1,8 @@
 <template>
   <v-form v-model="valid">
     <v-container>
-      <v-btn block @click="login" class="mb-4">Login</v-btn>
-      <v-btn block @click="logOut">Salir</v-btn>
+      <v-btn block @click="login" v-if="loger" color="orange" class="mb-4">Login</v-btn>
+      <v-btn block @click="logOut" v-if="!loger">Salir</v-btn>
       <v-row class="mt-5">
         <v-col cols="12" sm="6">
           <v-select
@@ -61,7 +61,7 @@
 
         <v-col
           cols="12"
-          md="4"
+          md="3"
         >
           <v-text-field
             v-model="phone"
@@ -79,10 +79,19 @@
           ></v-text-field>
         </v-col>
 
-        <v-col>
+        <v-col sm="3">
           <v-switch
             v-model="delivery.active"
             label="Delivery"
+            color="orange"
+            hide-details
+          ></v-switch>
+        </v-col>
+
+        <v-col sm="2">
+          <v-switch
+            v-model="top"
+            label="top"
             color="orange"
             hide-details
           ></v-switch>
@@ -144,7 +153,6 @@
       },
       slogan: '',
       category: '',
-      citys: [],
       city: '',
       valid: false,
       direction: '',
@@ -157,7 +165,8 @@
       fileBanner: '',
       fileLogo: '',
       cargando: false,
-      loger: true
+      loger: true,
+      top: false
     }),
     computed: {
       categoris() {
@@ -171,7 +180,6 @@
       }
     },
     mounted() {
-      console.log(this.dataForm)
       this.$store.dispatch('merchant/getCities')
     },
     methods: {
@@ -195,6 +203,8 @@
           if (!user) {
           user = await Moralis.authenticate()
           this.loger = false
+          } else {
+            this.loger = false
           }
         },
         async logOut() {
@@ -223,6 +233,7 @@
                 category: this.category,
                 delivery: this.delivery,
                 city: this.city,
+                top: this.top,
                 products: [],
                 slogan: this.slogan,
                 paymentMethods: [],
