@@ -3,6 +3,7 @@
     <v-container>
       <v-btn block @click="login" v-if="loger" color="orange" class="mb-4">Login</v-btn>
       <v-btn block @click="logOut" v-if="!loger">Salir</v-btn>
+      <p>{{ nameValue }}</p>
       <v-row class="mt-5">
         <v-col cols="12" sm="6">
           <v-select
@@ -34,6 +35,7 @@
           <v-text-field
             v-model="nameLocal"
             label="Nombre del Rest."
+            @keyup="nameVal"
             required
           ></v-text-field>
         </v-col>
@@ -166,7 +168,8 @@
       fileLogo: '',
       cargando: false,
       loger: true,
-      top: false
+      top: false,
+      nameValue: ''
     }),
     computed: {
       categoris() {
@@ -183,6 +186,11 @@
       this.$store.dispatch('merchant/getCities')
     },
     methods: {
+        nameVal() {
+          const val = this.nameLocal.toLowerCase()
+          this.nameValue = val.split(" ").join("")
+          console.log(this.nameValue)
+        },
         setCity(name) {
           this.$store.dispatch('merchant/getMerchantbyCity', name)
         },
@@ -227,7 +235,7 @@
             // console.log(file.hash())
             const data = {
                 name: this.nameLocal,
-                value: this.nameLocal,
+                value: this.nameValue,
                 address: this.direction,
                 owner: this.nameOwner,
                 category: this.category,
