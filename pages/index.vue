@@ -1,21 +1,27 @@
 <template>
   <div class="text-center">
-    <v-card>
-      <p>Crear Mercante</p>
-      <!-- <MapaM /> -->
-      <MerchantForm />
-    </v-card>
+    <v-row>
+      <v-col sm="8" cols>
+        <v-card>
+          <p>Crear Mercante</p>
+          <MerchantForm />
+        </v-card>
+      </v-col>
+      <v-col sm="4" cols>
+        <MerchantByCity />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script>
-// import MapaM from '@/components/MapaM'
+import MerchantByCity from '@/components/MerchantByCity'
 import MerchantForm from '@/components/MerchantForm'
 
 export default {
   components: {
-    MerchantForm
-    // MapaM
+    MerchantForm,
+    MerchantByCity
   }
 }
 </script>

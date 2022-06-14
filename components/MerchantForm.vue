@@ -4,6 +4,26 @@
       <v-row>
         <v-btn block @click="login" class="mb-4">Login</v-btn>
         <v-btn block @click="logOut">Salir</v-btn>
+        <v-col cols="12" sm="6">
+          <v-select
+            v-model="city"
+            :items="cities"
+            item-text="name"
+            outlined
+            :menu-props="{ top: true, offsetY: true }"
+            label="Ciudad"
+            @change="setCity(city)"
+          ></v-select>
+        </v-col>
+        <v-col cols="12" sm="6">
+          <v-select
+            v-model="category"
+            :items="dataForm.categoris"
+            outlined
+            :menu-props="{ top: true, offsetY: true }"
+            label="Categoria"
+          ></v-select>
+        </v-col>
         <v-col
           cols="12"
           md="4"
@@ -93,29 +113,10 @@
           <!-- <v-img width="300" :src="srcBanner"></v-img> -->
         </v-col>
 
-        <v-col cols="12">
-          <v-select
-            v-model="citis"
-            :items="cities"
-            outlined
-            :menu-props="{ top: true, offsetY: true }"
-            label="Ciudad"
-          ></v-select>
-        </v-col>
-
         <v-col>
           <MapaM />
         </v-col>
 
-        <v-col cols="12">
-          <v-select
-            v-model="category"
-            :items="categoris"
-            outlined
-            :menu-props="{ top: true, offsetY: true }"
-            label="Categoria"
-          ></v-select>
-        </v-col>
         <v-card v-if="cargando" width="100%" class="pt-2">
           <!-- <p>Cargando....</p> -->
           <v-img width="100%" src="https://c.tenor.com/13VnwKt5qS0AAAAd/waiting.gif"></v-img>
@@ -143,10 +144,9 @@
           active: false
       },
       slogan: '',
-      categoris: ['criolla', 'rapida', 'sushi', 'hamburguesa', 'pizza', 'china', 'arabe'],
       category: '',
-      cities: ['anaco', 'tigre', 'barcelona'],
-      citis: '',
+      citys: [],
+      city: '',
       valid: false,
       direction: '',
       phone: '',
@@ -163,18 +163,24 @@
       loger: true
     }),
     computed: {
+      dataForm() {
+        return this.$store.state.merchant.categoris
+      },
       coordenadas() {
         return this.$store.state.mapa.coordinates
+      },
+      cities() {
+        return this.$store.state.merchant.cities
       }
     },
-    created() {
-      // const user = Moralis.User.current()
-      // if (user) {
-      //   this.loger = false
-      // }
-      // this.logOut()
+    mounted() {
+      console.log(this.dataForm)
+      this.$store.dispatch('merchant/getCities')
     },
     methods: {
+        setCity(name) {
+          this.$store.dispatch('merchant/getMerchantbyCity', name)
+        },
         onFile(event) {
             this.fileLogo = event
             // console.log(this.fileLogo)
@@ -186,11 +192,6 @@
         },
         onFileBanner(event) {
             this.fileBanner = event
-            // const fileReader = new FileReader()
-            // fileReader.addEventListener('load', () => {
-            //     this.srcBanner = fileReader.result
-            // })
-            // fileReader.readAsDataURL(this.fileBanner)
         },
         async login() {
           let user = Moralis.User.current()
@@ -206,6 +207,9 @@
           this.loger = true
         },
         async sendData() {
+            if (!Moralis.User.current()) {
+              this.login()
+            }
             this.cargando = true
             const img = this.fileLogo
             const file = new Moralis.File('merchantLogo.jpg', img)
@@ -223,7 +227,7 @@
                 owner: this.nameOwner,
                 category: this.category,
                 delivery: this.delivery,
-                city: this.citis,
+                city: this.city,
                 products: [],
                 slogan: this.slogan,
                 paymentMethods: [],
@@ -235,6 +239,7 @@
             }
             console.log(data)
             this.$store.dispatch('merchant/sendMerchant', data)
+            // this.setCity()
             this.cargando = false
             this.reset()
             // return file.ipfs()

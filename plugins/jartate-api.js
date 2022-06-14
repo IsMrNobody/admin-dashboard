@@ -13,3 +13,35 @@ export const postMerchant = async (data) => {
         return error
     }
 }
+
+export const MerchantbyCity = async (city) => {
+    try {
+        const res = await axios.get(`${API_URL}/merchants/${city}`)
+        // console.log(res.data)
+        return res.data
+    } catch (error) {
+        console.log(error.response.data)
+        return error
+    }
+}
+
+export const deletMer = async (id) => {
+    try {
+        const res = await axios.delete(`${API_URL}/merchants/${id}`)
+        // console.log(res.data)
+        return res.data
+    } catch (error) {
+        console.log(error.response.data)
+        return error
+    }
+}
+
+export const getCity = async () => {
+    try {
+        const res = await axios.get(`${API_URL}/cities`)
+        return res.data
+    } catch (error) {
+        console.log(error.response.data)
+        return error
+    }
+}
