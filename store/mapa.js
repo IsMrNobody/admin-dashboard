@@ -53,11 +53,10 @@ export const actions = {
     newM.on('dragend', () =>{
       const mar = newM.getLngLat()
       dispatch('setLocationCoordinates', mar)
-      // console.log(state.coordinates)
     })
   },
 
-  initMapaF({ state, dispatch, rootState }) {
+  initMapaF({ state }) {
     this.map = new mapboxgl.Map({
       container: state.map,
       style: 'mapbox://styles/josemillan/ckag0pl3w08e51is6gpvgvlpp',
@@ -65,23 +64,7 @@ export const actions = {
       zoom: 12,
       pitch: 45
     })
-    // const marker = new mapboxgl.Marker({
-    //   draggable: true,
-    //   color: 'red'
-    // })
-      // .setLngLat(state.coordinates)
-      // .addTo(this.map)
     
-    this.map.on("dragend", (e) => {
-      // dispatch('setLocationCoordinates', e.lngLat)
-      // dispatch('addMapMarker', e.lngLat)
-      // console.log(state.coordinates)
-    })
-    // marker.on('dragend', () =>{
-    //   const mar = marker.getLngLat()
-    //   dispatch('setLocationCoordinates', mar)
-    //   // console.log(state.coordinates)
-    // })
     this.map.addControl(
       new mapboxgl.GeolocateControl({
         positionOptions: {

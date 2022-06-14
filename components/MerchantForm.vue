@@ -1,16 +1,16 @@
 <template>
   <v-form v-model="valid">
     <v-container>
-      <v-row>
-        <v-btn block @click="login" class="mb-4">Login</v-btn>
-        <v-btn block @click="logOut">Salir</v-btn>
+      <v-btn block @click="login" class="mb-4">Login</v-btn>
+      <v-btn block @click="logOut">Salir</v-btn>
+      <v-row class="mt-5">
         <v-col cols="12" sm="6">
           <v-select
             v-model="city"
             :items="cities"
             item-text="name"
             outlined
-            :menu-props="{ top: true, offsetY: true }"
+            :menu-props="{ bottom: true, offsetY: true }"
             label="Ciudad"
             @change="setCity(city)"
           ></v-select>
@@ -18,11 +18,14 @@
         <v-col cols="12" sm="6">
           <v-select
             v-model="category"
-            :items="dataForm.categoris"
+            :items="categoris"
             outlined
-            :menu-props="{ top: true, offsetY: true }"
+            :menu-props="{ bottom: true, offsetY: true }"
             label="Categoria"
           ></v-select>
+        </v-col>
+        <v-col>
+          <MapaM />
         </v-col>
         <v-col
           cols="12"
@@ -113,10 +116,6 @@
           <!-- <v-img width="300" :src="srcBanner"></v-img> -->
         </v-col>
 
-        <v-col>
-          <MapaM />
-        </v-col>
-
         <v-card v-if="cargando" width="100%" class="pt-2">
           <!-- <p>Cargando....</p> -->
           <v-img width="100%" src="https://c.tenor.com/13VnwKt5qS0AAAAd/waiting.gif"></v-img>
@@ -157,13 +156,11 @@
       nameLocal: '',
       fileBanner: '',
       fileLogo: '',
-      srcBanner: '',
-      srcLogo: '',
       cargando: false,
       loger: true
     }),
     computed: {
-      dataForm() {
+      categoris() {
         return this.$store.state.merchant.categoris
       },
       coordenadas() {
@@ -199,11 +196,9 @@
           user = await Moralis.authenticate()
           this.loger = false
           }
-          // console.log("logged in user:", user)
         },
         async logOut() {
           await Moralis.User.logOut()
-          // console.log('deslogueado')
           this.loger = true
         },
         async sendData() {

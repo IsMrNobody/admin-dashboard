@@ -2,8 +2,8 @@
   <div class="text-center">
     <v-row>
       <v-col sm="8" cols>
+        <h3>Crear Mercante</h3>
         <v-card>
-          <p>Crear Mercante</p>
           <MerchantForm />
         </v-card>
       </v-col>
