@@ -188,7 +188,6 @@
         nameVal() {
           const val = this.nameLocal.toLowerCase()
           this.nameValue = val.split(" ").join("")
-          console.log(this.nameValue)
         },
         setCity(name) {
           this.$store.dispatch('merchant/getMerchantbyCity', name)

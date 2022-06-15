@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { postMerchant, MerchantbyCity, getCity } from '@/plugins/jartate-api'
+import { postMerchant, MerchantbyCity, getCity, deletMer } from '@/plugins/jartate-api'
 import { success } from '@/plugins/swal'
 
 export const state = () => ({
@@ -51,9 +51,9 @@ export const actions = {
     // console.log(coordinates)
     commit('spiner', false)
   },
-  deletMerchant({ commit, state }, i) {
+  async deletMerchant({ commit, state }, i) {
     const dat = state.merchantTable[i]
-    // await deletMer(dat)
+    await deletMer(dat._id)
     success.fire({ title: 'Eliminado', timer: 1500 })
     commit('eleteFromList', i)
     return console.log(dat)

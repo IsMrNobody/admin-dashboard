@@ -64,7 +64,7 @@ export const actions = {
       zoom: 12,
       pitch: 45
     })
-    
+
     this.map.addControl(
       new mapboxgl.GeolocateControl({
         positionOptions: {
